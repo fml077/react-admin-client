@@ -1,4 +1,5 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## react-admin-client
+基于create-react-app的react管理后台项目
 
 ## Available Scripts
 
