@@ -2,16 +2,29 @@ import React, { Component } from 'react'
 
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import './index.component.less'
+import { reqLogin } from '../../../../api'
+
 const FormItem = Form.Item;
-class LoginForm extends React.Component {
+class LoginForm extends Component {
   handleSubmit = e => {
     // 阻止事件默认行为
     e.preventDefault();
     console.log('获得form输入框的值',this.props.form.getFieldsValue());
     
     this.props.form.validateFields((err, values) => {
+      // 无错误，即校验成功，向后台发ajax请求
       if (!err) {
-        console.log('Received values of form: ', values);
+        console.log('提交登录的ajax请求，Received values of form: ', values);
+        const {username, password} = values
+        reqLogin(username, password).then((response) => {
+          console.log('成功了', response.data)
+        }).catch((error) => {
+          console.log('失败了', error);
+          
+        })
+      } else {
+        console.log('校验失败');
+        
       }
     });
   };
