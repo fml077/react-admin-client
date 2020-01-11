@@ -11,17 +11,24 @@ class LoginForm extends Component {
     e.preventDefault();
     console.log('获得form输入框的值',this.props.form.getFieldsValue());
     
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFields(async (err, values) => {
       // 无错误，即校验成功，向后台发ajax请求
       if (!err) {
         console.log('提交登录的ajax请求，Received values of form: ', values);
         const {username, password} = values
-        reqLogin(username, password).then((response) => {
+        /* reqLogin(username, password).then((response) => {
           console.log('成功了', response.data)
         }).catch((error) => {
           console.log('失败了', error);
-          
-        })
+        }) */
+        // 改为async await简化promise
+        try {
+          const responst = await reqLogin(username, password);
+          console.log('请求成功了', responst.data);
+        } catch (error) {
+          console.log('请求失败了', error);
+        }
+
       } else {
         console.log('校验失败');
         
@@ -135,6 +142,17 @@ class LoginForm extends Component {
   2）接收一个组件（被包装组件），返回一个新组件（包装组件），包装组件会向被包装组件传入特定属性
   3）作用：扩展组件的功能
 */
+/* 
+async 和 await
+1. 作用
+  简化promise对象的使用：不用使用then()来指定成功/失败的回调函数
+  以同步编码（没有回调函数）方式实现异步流程
+2. 哪里写await
+  在返回promise的表达式左侧写await：不想要promise，只想要promise异步返回的data数据
+3. 哪里写async
+  在await所在函数(最近的函数)定义的左侧写async
+*/
+
 
 /* 
 Form.create: 包装Form组件生成一个新的组件：Form(Login)
