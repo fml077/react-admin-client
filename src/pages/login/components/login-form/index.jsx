@@ -21,14 +21,8 @@ class LoginForm extends Component {
         }).catch((error) => {
           console.log('失败了', error);
         }) */
-        // 改为async await简化promise
-        try {
-          const responst = await reqLogin(username, password);
-          console.log('请求成功了', responst.data);
-        } catch (error) {
-          console.log('请求失败了', error);
-        }
-
+        const responst = await reqLogin(username, password);
+        console.log('请求成功了', responst.data);
       } else {
         console.log('校验失败');
         
@@ -72,8 +66,8 @@ class LoginForm extends Component {
             rules: [
               { required: true, message: 'Please input your username!' },
               { min: 4, message: '用户名至少4位'},
-              { max: 20, message: '用户名至多20位'},
-              { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数字、下划线开头' }
+              { max: 30, message: '用户名至多30位'},
+              // { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数字、下划线开头' }
             ],
           })(
             <Input
