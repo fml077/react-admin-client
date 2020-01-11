@@ -10,6 +10,7 @@ import ajax from './ajax'
   return ajax('/login', {username, password}, 'POST')
 } */
 // 登录接口 es6写法
-export const reqLogin = (username, password) => ajax('/login', {username, password}, 'POST')
+// export const reqLogin = (username, password) => ajax('/login', {username, password}, 'POST')
+export const reqLogin = (title, body,userId) => ajax('https://jsonplaceholder.typicode.com/posts/', {title, body,userId}, 'POST')
 // 添加用户接口
 export const reqAddUser = (user) => ajax('/user/add', user, 'POST')
