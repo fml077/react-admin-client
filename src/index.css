@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.ant-layout-sider {
+  background-color: #fff !important;
+}
+.ant-layout-sider-children {
+  border-right: 1px solid #ccc;
+}
+.ant-layout-footer {
+  position: fixed !important;
+  left: 200px;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+}

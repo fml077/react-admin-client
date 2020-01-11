@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
+import { Layout } from 'antd';
 import memoryUtil from '../../utils/memoryUtil'
+import Header from '../../components/header'
+import LeftNav from '../../components/left-nav'
+
+const { Footer, Sider, Content } = Layout;
 export default class Admin extends Component {
   render() {
     const user = memoryUtil.user;
@@ -12,9 +17,19 @@ export default class Admin extends Component {
       return <Redirect to="/login" />
     }
     return (
-      <div>
-        这是admin首页，欢迎{user.username}
-      </div>
+      // <div>
+      //   这是admin首页，欢迎{user.username}
+      // </div>
+      <Layout style={{height: '100%'}}>
+        <Sider>
+          <LeftNav />
+        </Sider>
+        <Layout>
+          <Header />
+          <Content style={{backgroundColor: '#fff'}}>Content</Content>
+          <Footer className="footer">©copyright 2020 made by xiaomei</Footer>
+        </Layout>
+      </Layout>
     )
   }
 }
