@@ -13,11 +13,12 @@
 //   }
 // }
 import React, { Component } from 'react'
-
+import { Redirect }from 'react-router-dom'
 import { Form, Icon, Input, Button, Checkbox, message } from 'antd';
 import './index.less'
 import { reqLogin } from '../../api'
 import memoryUtil from '../../utils/memoryUtil'
+import storageUtil from '../../utils/storageUtil'
 
 const FormItem = Form.Item;
 class LoginForm extends Component {
@@ -44,6 +45,7 @@ class LoginForm extends Component {
         if (response.status === 201) { // todo-测试用，实际项目要改为接口状态码
           message.success('登录成功')
           memoryUtil.user = values // todo-测试用,实际项目要改为接口返回用户内容
+          storageUtil.saveUser(values) // 保存到local中
           console.log(77,memoryUtil.user);
           this.props.history.replace('/')
           
@@ -84,6 +86,11 @@ class LoginForm extends Component {
   }
 
   render() {
+    // 判断用户是否登录, 如果已经登录跳转到首页
+    const user = memoryUtil.user
+    if (user && user.username) {
+      return <Redirect to="/" />
+    }
     // 得到form对象
     const { getFieldDecorator } = this.props.form;
     return (
