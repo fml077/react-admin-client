@@ -25,8 +25,10 @@ export default class LeftNav extends Component {
         mode="inline"
       >
         <Menu.Item key="0">
-          <Icon type="home" />
-          首页
+          <Link to="/home">
+            <Icon type="home" />
+            首页
+          </Link>
         </Menu.Item>
         <SubMenu
           key="sub1"
@@ -38,12 +40,20 @@ export default class LeftNav extends Component {
           }
         >
           <Menu.ItemGroup key="g1" title="商品管理">
-            <Menu.Item key="1">商品入库</Menu.Item>
-            <Menu.Item key="2">商品出库</Menu.Item>
+            <Menu.Item key="1">
+              <Link to="/product">商品入库</Link>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <Link to="/product">商品出库</Link>
+            </Menu.Item>
           </Menu.ItemGroup>
-          <Menu.ItemGroup key="g2" title="商品明细">
-            <Menu.Item key="3">商品列表</Menu.Item>
-            <Menu.Item key="4">商品库存</Menu.Item>
+          <Menu.ItemGroup key="g2" title="品类管理">
+            <Menu.Item key="3">
+              <Link to="/category">品类列表</Link>
+            </Menu.Item>
+            <Menu.Item key="4">
+              <Link to="/category">品类库存</Link>
+            </Menu.Item>
           </Menu.ItemGroup>
         </SubMenu>
         <SubMenu
@@ -51,14 +61,20 @@ export default class LeftNav extends Component {
           title={
             <span>
               <Icon type="user" />
-              <span>用户</span>
+              <span>用户&角色</span>
             </span>
           }
         >
-          <Menu.Item key="5">角色管理</Menu.Item>
+          <Menu.Item key="5">
+            <Link to="/role">角色管理</Link>
+          </Menu.Item>
           <SubMenu key="sub3" title="用户管理">
-            <Menu.Item key="6">新增用户</Menu.Item>
-            <Menu.Item key="7">用户黑名单</Menu.Item>
+            <Menu.Item key="6">
+              <Link to="/role">新增用户</Link>
+            </Menu.Item>
+            <Menu.Item key="7">
+              <Link to="/role">用户黑名单</Link>
+            </Menu.Item>
           </SubMenu>
         </SubMenu>
         <SubMenu
@@ -70,8 +86,15 @@ export default class LeftNav extends Component {
             </span>
           }
         >
-          <Menu.Item key="8">饼图</Menu.Item>
-          <Menu.Item key="9">柱状图</Menu.Item>
+          <Menu.Item key="8">
+            <Link to="/pie">饼图</Link>
+          </Menu.Item>
+          <Menu.Item key="9">
+            <Link to="/bar">柱状图</Link>
+          </Menu.Item>
+          <Menu.Item key="10">
+            <Link to="/line">折线图</Link>
+          </Menu.Item>
         </SubMenu>
       </Menu>
       </div>
