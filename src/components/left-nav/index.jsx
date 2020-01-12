@@ -4,12 +4,30 @@ import { Link } from 'react-router-dom'
 import logoImg from '../../assets/images/logo.png'
 import { Menu, Icon } from 'antd';
 import './index.less'
-
+import menuList from '../../config/menuConfig'
 const { SubMenu } = Menu;
 export default class LeftNav extends Component {
   handleClick = e => {
     console.log('click ', e);
   };
+  // 动态生成菜单路由 map()加递归方法
+  getMenuList = (menuList) => {
+    return menuList.map((item, i) => {
+      if (!item.children) {
+        return (
+          <Menu.Item key={item.key}>
+            <Link to={item.link}><Icon type={item.icon} /> {item.title}</Link>
+          </Menu.Item>
+        )
+      } else {
+          return (
+            <SubMenu key={item.key} title={<span><Icon type={item.icon} />{item.title}</span>} >
+              {this.getMenuList(item.children)}
+            </SubMenu>
+          )
+      }
+    })
+  }
   render() {
     return (
       <div className="left-nav">
@@ -24,7 +42,8 @@ export default class LeftNav extends Component {
         // defaultOpenKeys={['sub1']}
         mode="inline"
       >
-        <Menu.Item key="0">
+        {this.getMenuList(menuList)}
+        {/* <Menu.Item key="0">
           <Link to="/home">
             <Icon type="home" />
             首页
@@ -95,7 +114,7 @@ export default class LeftNav extends Component {
           <Menu.Item key="10">
             <Link to="/line">折线图</Link>
           </Menu.Item>
-        </SubMenu>
+        </SubMenu> */}
       </Menu>
       </div>
     )
