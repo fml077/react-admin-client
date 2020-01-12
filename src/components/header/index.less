@@ -1,3 +1,50 @@
 .header {
   height: 80px;
+  background-color: #fff;
+
+  .header-top {
+    height: 40px;
+    padding: 0 15px;
+    line-height: 40px;
+    text-align: right;
+    border-bottom: 1px solid #1890ff;
+
+    span {
+      margin: 10px;
+    }
+  }
+
+  .header-bottom {
+    display: flex;
+    height: 40px;
+    padding: 0 15px;
+    line-height: 40px;
+    .header-bottom-left {
+      width: 30%;
+      padding-left: 15px;
+      font-size: 18px;
+      box-sizing: border-box;
+      span {
+        position: relative;
+        &::after {
+          position: absolute;
+          bottom: -155%;
+          left: 50%;
+          transform: translateX(-50%);
+          content: '';
+          border: 15px solid transparent; 
+          border-color: white transparent transparent transparent;
+        }
+      }
+    }
+
+    .header-bottom-right {
+      width: 70%;
+      text-align: right;
+      img {
+        height: 16px;
+        margin: -3px 6px 0;
+      }
+    }
+  }
 }
