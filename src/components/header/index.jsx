@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Modal } from 'antd'
 import { withRouter } from 'react-router-dom';
 import { formateDate } from "../../utils/dateUtils";
+import LinkButton from '../../components/link-button'
 import menuList from "../../config/menuConfig";
 import memoryUtil from "../../utils/memoryUtil";
 import storageUtil from "../../utils/storageUtil";
@@ -78,7 +79,8 @@ class Header extends Component {
     return (
       <div className="header">
         <div className="header-top">
-          <span>欢迎 {user}</span> <a onClick={this.logout}>退出</a>
+          {/* <span>欢迎 {user}</span> <a onClick={this.logout}>退出</a> */}
+          <span>欢迎 {user}</span> <LinkButton onClick={this.logout}>退出</LinkButton>
         </div>
         <div className="header-bottom">
           <div className="header-bottom-left">
