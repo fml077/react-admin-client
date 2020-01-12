@@ -10,8 +10,8 @@ export default class LeftNav extends Component {
   handleClick = e => {
     console.log('click ', e);
   };
-  // 动态生成菜单路由 map()加递归方法
-  getMenuList = (menuList) => {
+  // 动态生成菜单路由：方法一： map()加递归方法
+  getMenuList_map = (menuList) => {
     return menuList.map((item, i) => {
       if (!item.children) {
         return (
@@ -22,11 +22,33 @@ export default class LeftNav extends Component {
       } else {
           return (
             <SubMenu key={item.key} title={<span><Icon type={item.icon} />{item.title}</span>} >
-              {this.getMenuList(item.children)}
+              {this.getMenuList_map(item.children)}
             </SubMenu>
           )
       }
     })
+  }
+  // 动态生成菜单路由：方法二： reduce()加递归方法
+  getMenuList = (menuList) => {
+    return menuList.reduce((pre, item) => {
+      // 向pre添加Menu.Item
+      if (!item.children) {
+        pre.push((
+          <Menu.Item key={item.key}>
+            <Link to={item.link}><Icon type={item.icon} /> {item.title}</Link>
+          </Menu.Item>
+        ))
+      } else {
+        // 有children二级菜单，向pre添加SubMenu
+        pre.push((
+          <SubMenu key={item.key} title={<span><Icon type={item.icon} />{item.title}</span>} >
+            {/* 递归调用 */}
+            {this.getMenuList(item.children)}
+          </SubMenu>
+        ))
+      }
+      return pre;
+    } , []) // 向空数组中添加pre
   }
   render() {
     return (
