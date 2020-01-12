@@ -2,52 +2,52 @@
 const menuList = [
   {
     title: '首页',
-    key: '1',
+    key: '/home',
     icon: 'home',
     link: '/home'
   },
   {
     title: '商品',
-    key: '2',
+    key: '/products',
     icon: 'calendar',
     itemGroup: '商品管理',
     children: [
       {
         title: '商品出库',
-        key: '3',
+        key: '/product',
         icon: 'calendar',
         link: '/product'
 
       },
-      {
-        title: '商品入库',
-        key: '4',
-        icon: 'calendar',
-        link: '/product'
-      },
+      // {
+      //   title: '商品入库',
+      //   key: '/product',
+      //   icon: 'calendar',
+      //   link: '/product'
+      // },
     ]
   },
   {
     title: '图表分析',
-    key: '5',
+    key: '/charts',
     icon: 'setting',
     // itemGroup: '图表',
     children: [
       {
         title: '柱状图',
-        key: '6',
+        key: '/bar',
         icon: 'calendar',
         link: '/bar'
       },
       {
         title: '折线图',
-        key: '7',
+        key: '/line',
         icon: 'setting',
         link: '/line'
       },
       {
         title: '饼图',
-        key: '8',
+        key: '/pie',
         icon: 'setting',
         link: '/pie'
       }
