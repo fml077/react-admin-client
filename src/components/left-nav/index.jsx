@@ -8,7 +8,7 @@ import menuList from '../../config/menuConfig'
 const { SubMenu } = Menu;
 class LeftNav extends Component {
   handleClick = e => {
-    console.log('click ', e);
+    // console.log('click ', e);
   };
   // 动态生成菜单路由：方法一： map()加递归方法
   getMenuList = (menuList) => {

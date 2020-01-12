@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
-// import { withRouter } from 'react-router-dom'
+import { Modal } from 'antd'
 import { withRouter } from 'react-router-dom';
 import { formateDate } from "../../utils/dateUtils";
 import menuList from "../../config/menuConfig";
 import memoryUtil from "../../utils/memoryUtil";
+import storageUtil from "../../utils/storageUtil";
 
 import './index.less' 
+const { confirm } = Modal;
+
 class Header extends Component {
   state = {
     time: formateDate(Date.now()),
@@ -13,7 +16,7 @@ class Header extends Component {
     weather: '' //天气情况
   }
   getCurrentTime =() => {
-    setInterval(() => {
+    this.intervalId = setInterval(() => {
       const time = formateDate(Date.now())
       this.setState({ time })
     }, 1000);
@@ -40,15 +43,32 @@ class Header extends Component {
     return title;
   }
   /* 
+  退出登录确认框 */
+  logout =() => {
+    // const { confirm } = Modal;
+    confirm({
+      title: '确定要退出登录吗？',
+      onOk: () => {
+        // 删除保存的用户登录数据，从内存、local都要删除
+        storageUtil.removeUser()
+        memoryUtil.user = {}
+        // 跳转到登录页面
+        this.props.history.replace('/login')
+      }
+    });
+  }
+  /* 
   第一次render()之后执行一次
   一般在此执行异步请求：发ajax请求/启动定时器
    */
   componentDidMount() {
     this.getCurrentTime();
   }
-  //WARNING! To be deprecated in React v17. Use componentDidMount instead.
-  componentWillMount() {
-    
+  /* 
+  页面卸载时调用 */
+  componentWillUnmount() {
+    // 清除时间更新定时器
+    clearInterval(this.intervalId)
   }
   render() {
    const { time, dayPicture, weather } = this.state;
@@ -58,7 +78,7 @@ class Header extends Component {
     return (
       <div className="header">
         <div className="header-top">
-          <span>欢迎 {user}</span> <a href="">退出</a>
+          <span>欢迎 {user}</span> <a onClick={this.logout}>退出</a>
         </div>
         <div className="header-bottom">
           <div className="header-bottom-left">

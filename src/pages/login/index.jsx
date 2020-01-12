@@ -25,13 +25,13 @@ class LoginForm extends Component {
   handleSubmit = e => {
     // 阻止事件默认行为
     e.preventDefault();
-    console.log('获得form输入框的值',this.props.form.getFieldsValue());
+    // console.log('获得form输入框的值',this.props.form.getFieldsValue());
     
     this.props.form.validateFields(async (err, values) => {
       // const _this = this;
       // 无错误，即校验成功，向后台发ajax请求
       if (!err) {
-        console.log('提交登录的ajax请求，Received values of form: ', values);
+        // console.log('提交登录的ajax请求，Received values of form: ', values);
         const {username, password} = values
         /* reqLogin(username, password).then((response) => {
           console.log('成功了', response.data)
@@ -40,13 +40,11 @@ class LoginForm extends Component {
         }) */
         // const response = await reqLogin(username, password);
         const response = await reqLogin('foo', 'bar', 1); // toto-写死了测试用，实际项目中要改为传入form表单数据
-        console.log('请求成功了', response);
         // const result = response.data
         if (response.status === 201) { // todo-测试用，实际项目要改为接口状态码
           message.success('登录成功')
           memoryUtil.user = values // todo-测试用,实际项目要改为接口返回用户内容
           storageUtil.saveUser(values) // 保存到local中
-          console.log(77,memoryUtil.user);
           this.props.history.replace('/')
           
           // 跳转到首页，不允许回退用replace，允许回退用push
@@ -54,7 +52,6 @@ class LoginForm extends Component {
           message.error('登录失败')
         }
       } else {
-        console.log('校验失败');
         message.error('登录失败')
       }
     });
@@ -71,7 +68,6 @@ class LoginForm extends Component {
     callback() //校验通过执行
     callback('xxx') // 校验不通过的提示信息 xxx 
     */
-    console.log(rule, value)
     if (!value) {
       callback('密码必填')
     } else if (value.length < 6) {
