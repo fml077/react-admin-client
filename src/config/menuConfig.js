@@ -13,10 +13,10 @@ const menuList = [
     itemGroup: '商品管理',
     children: [
       {
-        title: '商品出库',
-        key: '/product',
+        title: '商品分类',
+        key: '/category',
         icon: 'calendar',
-        link: '/product'
+        link: '/category'
 
       },
       // {

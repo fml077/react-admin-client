@@ -11,6 +11,31 @@ import ajax from './ajax'
 } */
 // 登录接口 es6写法
 // export const reqLogin = (username, password) => ajax('/login', {username, password}, 'POST')
+
 export const reqLogin = (title, body,userId) => ajax('https://jsonplaceholder.typicode.com/posts/', {title, body,userId}, 'POST')
-// 添加用户接口
-export const reqAddUser = (user) => ajax('/user/add', user, 'POST')
+// 获取用户列表接口
+export const reqAddUser = (user) => ajax('/manage/user/list')
+// 获取优惠券接口
+// export const reqEample = (user) => ajax('/discounts/coupons')
+// 登录接口获取用户列表接口
+export const reqEample = () => ajax('/manage/user/list')
+// 获取一级/二级分类列表接口, GET请求
+/* 
+parentId:传入的分类父类id
+ */
+export const reqGetCategorys =(parentId) => ajax('/manage/category/list', {parentId})
+// 添加分类, POST请求
+/* 
+parentId:所属父类id
+categoryName:传入的分类名称
+ */
+export const reqAddCategory =(parentId, categoryName) => ajax('/manage/category/add', {parentId, categoryName}, 'POST')
+// 更新分类, POST请求
+/* 
+categoryId:传入的分类id
+categoryName:传入的分类名称
+ */
+export const reqUpdateCategory =({categoryId, categoryName}) => ajax('/manage/category/update', {categoryId, categoryName}, 'POST')
+//  获取文章分类列表 GET请求
+export const reqGetArticleList =() => ajax('/cms/category/list',)
+
