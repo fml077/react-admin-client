@@ -37,5 +37,11 @@ categoryName:传入的分类名称
  */
 export const reqUpdateCategory =({categoryId, categoryName}) => ajax('/manage/category/update', {categoryId, categoryName}, 'POST')
 //  获取文章分类列表 GET请求
-export const reqGetArticleList =() => ajax('/cms/category/list',)
+export const reqGetCategoryList =() => ajax('/cms/category/list',)
+
+//  获取文章列表 POST请求
+export const reqGetArticleList =(id) => ajax('/cms/news/list', {}, 'POST')
+//  获取文章详情 GET请求, 传参id
+export const reqGetArticleDetail =(id) => ajax('/cms/news/detail', {id})
+
 

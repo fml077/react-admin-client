@@ -10,14 +10,19 @@ const menuList = [
     title: '商品',
     key: '/products',
     icon: 'calendar',
-    itemGroup: '商品管理',
+    itemGroup: '文章管理',
     children: [
       {
-        title: '商品分类',
+        title: '文章分类',
         key: '/category',
         icon: 'calendar',
         link: '/category'
-
+      },
+      {
+        title: '文章列表',
+        key: '/article',
+        icon: 'setting',
+        link: '/article'
       },
       // {
       //   title: '商品入库',

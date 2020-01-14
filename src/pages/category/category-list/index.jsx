@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Card, Button, Icon, Table, Divider, message, Tooltip } from 'antd'
-import { reqGetArticleList } from '../../api'
+import { reqGetCategoryList, reqGetArticleDetail } from '../../../api'
 export default class Category extends Component {
   state = {
     categorys: [], // 文章分类
@@ -69,9 +69,9 @@ export default class Category extends Component {
     ];
   }
   // 获取文章类别列表
-  getArticleList =  async () => {
+  getCategoryList =  async () => {
     this.setState({tableLoading: true})
-    const result = await reqGetArticleList()
+    const result = await reqGetCategoryList()
     
     this.setState({tableLoading: false}) // 接口数据返回后关闭loading效果
 
@@ -84,12 +84,42 @@ export default class Category extends Component {
       message.error('服务器出错了┭┮﹏┭┮')
     }
   }
+ 
+  // 获取文章详情
+  getArticleDetail = async (id) => {
+//     author: 小美
+// categoryId: 7089
+// commentNumber: 0
+// content: <p>前端达人，揭秘react从入门到放弃的秘诀&hellip;&hellip;欢迎围观吐槽</p>
+// dateAdd: 2020-01-13 18:13:10
+// descript: 前端达人，揭秘react从入门到放弃的秘诀……
+// id: 22754
+// isRecommend: true
+// keywords: react
+// numberFav: 0
+// paixu: 0
+// pic: https://dcdn.it120.cc/2020/01/13/033e210a-06c3-4094-ba36-a92d851dccb5.jpeg
+// status: 2
+// statusStr: 审核通过
+// tags: 前端
+// title: 揭秘react从入门到放弃
+// uid: 0
+// unusefulNumber: 0
+// usefulNumber: 0
+// userId: 11135
+// views: 0
+// extJsonStr: {}
+    const result = await reqGetArticleDetail(22754)
+    console.log(56,result);
+    
+  }
   componentWillMount() {
     this.initColumns()
     
   }
   componentDidMount() {
-    this.getArticleList()
+    this.getCategoryList()
+    this.getArticleDetail()
   }
   
   

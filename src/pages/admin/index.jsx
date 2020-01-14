@@ -6,7 +6,8 @@ import Header from '../../components/header'
 import LeftNav from '../../components/left-nav'
 import { Switch, Route } from 'react-router-dom'
 import Home  from '../home'
-import Category  from '../category'
+import Category  from '../category/category-list'
+import Article  from '../category/article-list'
 import User  from '../user'
 import Role  from '../role'
 import Product  from '../product'
@@ -40,6 +41,7 @@ export default class Admin extends Component {
             <Switch>
               <Route path="/home" component={Home}/>
               <Route path="/category" component={Category}/>
+              <Route path="/article" component={Article}/>
               <Route path="/user" component={User}/>
               <Route path="/role" component={Role}/>
               <Route path="/product" component={Product}/>
