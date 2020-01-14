@@ -6,6 +6,7 @@ export default class Article extends Component {
     articles: [], // 文章分类
     tableLoading: false, // 表格数据加载状态 
     detail: {}, // 文章详情
+    modalStatus : 0 // 控制Modal弹窗 0都不显示，1为只显示详情弹窗，2为只显示编辑弹窗
   }
   // 初始化表格columns
   initColumns = () => {
@@ -38,7 +39,9 @@ export default class Article extends Component {
             <a onClick={(e) => (this.getArticleDetail(record.id)
             )}>查看详情</a>
             <Divider type="vertical" />
-            <a>编辑</a>
+            <a onClick={(e) => {
+              this.handleModalStatus(2)
+            }}>编辑</a>
           </span>
         ),
       },
@@ -104,6 +107,31 @@ export default class Article extends Component {
 // extJsonStr: {}
     const result = await reqGetArticleDetail(id)
     console.log(1567,result.data.data);
+    // 显示详情Modal
+    this.handleModalStatus(1)
+    
+  }
+  // 控制Modal弹窗
+  handleModalStatus = (status) => {
+    this.setState({modalStatus: status})
+    // console.log('99',this.state.modalStatus);
+    
+  }
+  // 隐藏modal弹窗
+  hideModal = () => {
+    this.setState({modalStatus: 0})
+  }
+  // 显示文章详情Modal弹窗
+  showDetail = () => {
+    console.log('显示详情');
+    // 关闭Modal弹窗
+    this.handleModalStatus(0)
+  }
+  // 编辑更新文章
+  updateArticle = () => {
+    console.log("编辑文章");
+    // 关闭Modal弹窗
+    this.handleModalStatus(0)
     
   }
   componentWillMount() {
@@ -113,7 +141,8 @@ export default class Article extends Component {
     this.getArticlesList()
   }
   render() {
-    const { articles, tableLoading } = this.state;
+    const { articles, tableLoading, modalStatus } = this.state;
+    const { updateArticle, showDetail } = this;
     const title = '文章列表';
     const extra = (
       <Button type="primary">
@@ -131,6 +160,22 @@ export default class Article extends Component {
         bordered
         pagination={{defaultPageSize: 1, showQuickJumper: true}}
          />
+         <Modal
+          title="文章详情"
+          visible={modalStatus === 1}
+          onOk={showDetail}
+          onCancel={this.hideModal}
+        >
+          <p>文章详情</p>
+        </Modal>
+        <Modal
+          title="编辑文章"
+          visible={modalStatus === 2}
+          onOk={updateArticle}
+          onCancel={this.hideModal}
+        >
+          <p>编辑文章</p>
+        </Modal>
       </Card>
     )
   }
