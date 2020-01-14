@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Button, Icon, Table, Divider, message } from 'antd'
+import { Card, Button, Icon, Table, Divider, message, Tooltip } from 'antd'
 import { reqGetArticleList } from '../../api'
 export default class Category extends Component {
   state = {
@@ -35,7 +35,16 @@ export default class Category extends Component {
         key: 'name',
       },
       {
-        title: '所属分类级别',
+        title: () => (
+          <span>
+            {'所属分类级别'}
+            <Tooltip
+                title={'分类级别分为一二三级'}
+            >
+              <Icon style={{ marginLeft: 8 }} type="question-circle" />
+            </Tooltip>
+          </span>
+        ),
         dataIndex: 'level',
         key: 'level',
         render: (level) => (level || '' + '级')
@@ -53,7 +62,7 @@ export default class Category extends Component {
           <span>
             <a>查看详情</a>
             <Divider type="vertical" />
-            <a>删除</a>
+            <a>编辑</a>
           </span>
         ),
       },
