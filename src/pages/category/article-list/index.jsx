@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Card, Button, Icon, Table, Divider, message, Tag, Modal } from 'antd'
 import { reqGetArticleList, reqGetArticleDetail } from '../../../api'
+import EditForm from '../article-list/components/edit-form'
 export default class Article extends Component {
   state = {
     articles: [], // 文章分类
@@ -40,7 +41,7 @@ export default class Article extends Component {
             )}>查看详情</a>
             <Divider type="vertical" />
             <a onClick={(e) => {
-              this.handleModalStatus(2)
+              this.editArticle(record)
             }}>编辑</a>
           </span>
         ),
@@ -127,6 +128,13 @@ export default class Article extends Component {
     // 关闭Modal弹窗
     this.handleModalStatus(0)
   }
+  // 点击编辑按钮
+  editArticle = (record) => {
+    // 保存当前记录数据用于传递给子组件edit-form
+    this.currentRecord = record
+    // 显示编辑弹框
+    this.handleModalStatus(2)
+  }
   // 编辑更新文章
   updateArticle = () => {
     console.log("编辑文章");
@@ -142,7 +150,7 @@ export default class Article extends Component {
   }
   render() {
     const { articles, tableLoading, modalStatus } = this.state;
-    const { updateArticle, showDetail } = this;
+    const { updateArticle, showDetail, currentRecord } = this;
     const title = '文章列表';
     const extra = (
       <Button type="primary">
@@ -175,6 +183,7 @@ export default class Article extends Component {
           onCancel={this.hideModal}
         >
           <p>编辑文章</p>
+          <EditForm currentRecord={currentRecord} />
         </Modal>
       </Card>
     )
