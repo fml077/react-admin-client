@@ -43,5 +43,10 @@ export const reqGetCategoryList =() => ajax('/cms/category/list',)
 export const reqGetArticleList =(id) => ajax('/cms/news/list', {}, 'POST')
 //  获取文章详情 GET请求, 传参id
 export const reqGetArticleDetail =(id) => ajax('/cms/news/detail', {id})
+/* 
+//  编辑文章 POST请求, 传参
+categoryId: 文章分类ID, content:文章内容, descript:文章摘要, title:文章标题 
+*/
+export const reqUpdateArticle =({categoryId, content, descript, title }) => ajax('/cms/news/put', {categoryId, content, descript, title }, 'POST')
 
 

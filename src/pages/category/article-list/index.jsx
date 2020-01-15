@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Card, Button, Icon, Table, Divider, message, Tag, Modal } from 'antd'
-import { reqGetArticleList, reqGetArticleDetail } from '../../../api'
+import { reqGetArticleList, reqGetArticleDetail, reqUpdateArticle } from '../../../api'
 import EditForm from '../article-list/components/edit-form'
 import DetailForm from '../article-list/components/detail-form'
 export default class Article extends Component {
@@ -79,7 +79,7 @@ export default class Article extends Component {
       this.setState({articles})
       this.setState({tableLoading: false})
     } else {
-      message.error('服务器出错了┭┮﹏┭┮')
+      message.error(result.data.msg)
     }
   }
   
@@ -130,11 +130,27 @@ export default class Article extends Component {
     // 显示编辑弹框
     this.handleModalStatus(2)
   }
-  // 编辑更新文章
-  updateArticle = () => {
-    console.log("编辑文章");
-    // 关闭Modal弹窗
+  // 点击编辑更新文章Modal弹窗OK按钮
+  updateArticle = async () => {
+    // 1、关闭Modal弹窗
     this.handleModalStatus(0)
+    // 2、获取edit-form表单数据相应字段值，this.form是在setForm属性中接收到的子组件form对象
+    const categoryId = this.form.getFieldValue('categoryId')
+    const content = this.form.getFieldValue('content')
+    const descript = this.form.getFieldValue('descript')
+    const title = this.form.getFieldValue('title')
+    // 清除edit-form表单输入数据
+    this.form.resetFields()
+    // 3、发请求更新数据
+    const result = await reqUpdateArticle({categoryId, content, descript, title});
+    console.log('4443',result.data.data);
+    // 4、重新渲染列表表格数据
+    if (result.data.code === 0) {
+      this.getArticlesList()
+    } else {
+      message.error(result.data.msg)
+    }
+    
     
   }
   componentWillMount() {
@@ -181,7 +197,11 @@ export default class Article extends Component {
           onOk={updateArticle}
           onCancel={this.hideModal}
         >
-          <EditForm currentRecord={currentRecord} />
+          <EditForm 
+            currentRecord={currentRecord}
+            // 设置setForm属性用一个方法使得子组件能将form对象传递过来以获得子组件form表单值并存为this.form 
+            setForm={(form) => this.form = form}
+          />
         </Modal>
       </Card>
     )

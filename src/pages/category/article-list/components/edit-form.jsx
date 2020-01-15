@@ -1,18 +1,28 @@
 import React, { Component } from 'react'
 import { Form, Select, Input } from 'antd'
+import PropTypes from 'prop-types';
+import { reqUpdateArticle } from '../../../../api/index';
 const Item = Form.Item
 const { Option } = Select;
 const { TextArea } = Input;
 class EditForm extends Component {
+  // static PropTypes = {
+  //   setForm: PropTypes.func.isRequired
+  // }
   // 提交表单
   handleSubmit = (e) => {
     console.log(e);
-    
+    e.preventDefault()
   }
+  
+  componentWillMount() {
+    // 将form对象通过setForm()传递给父组件
+    this.props.setForm(this.props.form)
+  }
+  
   render() {
     const {getFieldDecorator} = this.props.form;
     const {currentRecord} = this.props;
-    console.log('currentRecord',currentRecord);
     
     const formItemLayout = {
       labelCol: { span: 6 },
@@ -20,7 +30,7 @@ class EditForm extends Component {
     };
     return (
       <div>
-        <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+        <Form {...formItemLayout} onSubmit={() => (this.handleSubmit)}>
           <Item label="文章分类" hasFeedback>
             {getFieldDecorator('categoryId', {
               rules: [{ required: true, message: '请选择分类!' }],

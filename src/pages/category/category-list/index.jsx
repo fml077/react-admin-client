@@ -75,13 +75,13 @@ export default class Category extends Component {
     
     this.setState({tableLoading: false}) // 接口数据返回后关闭loading效果
 
-    if (result.data.msg === 'success') {
+    if (result.data.code === 0) {
       const categorys = result.data.data || [];
       this.setState({
         categorys
       })
     } else {
-      message.error('服务器出错了┭┮﹏┭┮')
+      message.error(result.data.msg)
     }
   }
  
