@@ -134,26 +134,32 @@ export default class Article extends Component {
     this.handleModalStatus(2)
   }
   // 点击编辑更新文章Modal弹窗OK按钮
-  updateArticle = async () => {
-    // 1、关闭Modal弹窗
-    this.handleModalStatus(0)
-    // 2、获取edit-form表单数据相应字段值，this.form是在setForm属性中接收到的子组件form对象
-    const categoryId = this.form.getFieldValue('categoryId')
-    const content = this.form.getFieldValue('content')
-    const descript = this.form.getFieldValue('descript')
-    const title = this.form.getFieldValue('title')
-    // 清除edit-form表单输入数据
-    this.form && this.form.resetFields()
-    // 3、发请求更新数据
-    const result = await reqUpdateArticle({categoryId, content, descript, title});
-    console.log('4443',result.data.data);
-    // 4、重新渲染列表表格数据
-    if (result.data.code === 0) {
-      this.getArticlesList()
-    } else {
-      message.error(result.data.msg)
-    }
-    
+  updateArticle =  () => {
+    // 编辑文章点击OK按钮提交前先进行表单错误校验
+    this.form.validateFieldsAndScroll(async (errors, values) => {
+      if (!errors) {
+        // 1、关闭Modal弹窗
+        this.handleModalStatus(0)
+        // 2、获取edit-form表单数据相应字段值，this.form是在setForm属性中接收到的子组件form对象
+        const categoryId = this.form.getFieldValue('categoryId')
+        const content = this.form.getFieldValue('content')
+        const descript = this.form.getFieldValue('descript')
+        const title = this.form.getFieldValue('title')
+        // 清除edit-form表单输入数据
+        this.form && this.form.resetFields()
+        // 3、发请求更新数据
+        const result = await reqUpdateArticle({categoryId, content, descript, title});
+        console.log('4443',result.data.data);
+        // 4、重新渲染列表表格数据
+        if (result.data.code === 0) {
+          this.getArticlesList()
+        } else {
+          message.error(result.data.msg)
+        }
+      } else {
+        return
+      }
+    })
     
   }
   componentWillMount() {
