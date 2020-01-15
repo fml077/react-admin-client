@@ -121,6 +121,9 @@ export default class Article extends Component {
   }
   // 隐藏modal弹窗
   hideModal = () => {
+    // 清除form表单输入数据
+    this.form && this.form.resetFields()
+    // 关闭modal弹窗
     this.setState({modalStatus: 0})
   }
   // 点击编辑按钮
@@ -140,7 +143,7 @@ export default class Article extends Component {
     const descript = this.form.getFieldValue('descript')
     const title = this.form.getFieldValue('title')
     // 清除edit-form表单输入数据
-    this.form.resetFields()
+    this.form && this.form.resetFields()
     // 3、发请求更新数据
     const result = await reqUpdateArticle({categoryId, content, descript, title});
     console.log('4443',result.data.data);
