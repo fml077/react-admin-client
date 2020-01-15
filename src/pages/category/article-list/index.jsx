@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Card, Button, Icon, Table, Divider, message, Tag, Modal } from 'antd'
 import { reqGetArticleList, reqGetArticleDetail } from '../../../api'
 import EditForm from '../article-list/components/edit-form'
+import DetailForm from '../article-list/components/detail-form'
 export default class Article extends Component {
   state = {
     articles: [], // 文章分类
@@ -37,7 +38,7 @@ export default class Article extends Component {
         key: 'action',
         render: (record) => (
           <span>
-            <a onClick={(e) => (this.getArticleDetail(record.id)
+            <a onClick={(e) => (this.getArticleDetail(record)
             )}>查看详情</a>
             <Divider type="vertical" />
             <a onClick={(e) => {
@@ -81,8 +82,9 @@ export default class Article extends Component {
       message.error('服务器出错了┭┮﹏┭┮')
     }
   }
+  
   // 获取文章详情
-  getArticleDetail = async (id) => {
+  getArticleDetail = async (record) => {
 
 //     author: 小美
 // categoryId: 7089
@@ -106,8 +108,9 @@ export default class Article extends Component {
 // userId: 11135
 // views: 0
 // extJsonStr: {}
-    const result = await reqGetArticleDetail(id)
-    console.log(1567,result.data.data);
+    const result = await reqGetArticleDetail(record.id)
+    // 保存当前记录数据用于传递给子组件detail-form
+    this.currentDetail = result.data.data;
     // 显示详情Modal
     this.handleModalStatus(1)
     
@@ -115,23 +118,15 @@ export default class Article extends Component {
   // 控制Modal弹窗
   handleModalStatus = (status) => {
     this.setState({modalStatus: status})
-    // console.log('99',this.state.modalStatus);
-    
   }
   // 隐藏modal弹窗
   hideModal = () => {
     this.setState({modalStatus: 0})
   }
-  // 显示文章详情Modal弹窗
-  showDetail = () => {
-    console.log('显示详情');
-    // 关闭Modal弹窗
-    this.handleModalStatus(0)
-  }
   // 点击编辑按钮
   editArticle = (record) => {
-    // 保存当前记录数据用于传递给子组件edit-form
-    this.currentRecord = record
+    // 保存当前记录数据用于传递给子组件detail-form
+    this.currentRecord = record;
     // 显示编辑弹框
     this.handleModalStatus(2)
   }
@@ -150,7 +145,7 @@ export default class Article extends Component {
   }
   render() {
     const { articles, tableLoading, modalStatus } = this.state;
-    const { updateArticle, showDetail, currentRecord } = this;
+    const { updateArticle, currentRecord, currentDetail } = this;
     const title = '文章列表';
     const extra = (
       <Button type="primary">
@@ -171,10 +166,14 @@ export default class Article extends Component {
          <Modal
           title="文章详情"
           visible={modalStatus === 1}
-          onOk={showDetail}
           onCancel={this.hideModal}
+          //设置foot而不需要显示cancel和OK按钮 
+          footer={[ 
+            null, 
+            null, 
+          ]} 
         >
-          <p>文章详情</p>
+          <DetailForm currentDetail={currentDetail} />
         </Modal>
         <Modal
           title="编辑文章"
@@ -182,7 +181,6 @@ export default class Article extends Component {
           onOk={updateArticle}
           onCancel={this.hideModal}
         >
-          <p>编辑文章</p>
           <EditForm currentRecord={currentRecord} />
         </Modal>
       </Card>
