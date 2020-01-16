@@ -38,11 +38,11 @@ export default class Article extends Component {
         key: 'action',
         render: (record) => (
           <span>
-            <a onClick={(e) => (this.getArticleDetail(record)
+            <a onClick={(e) => (this.getArticleDetail(record, 1)
             )}>查看详情</a>
             <Divider type="vertical" />
             <a onClick={(e) => {
-              this.editArticle(record)
+              this.getArticleDetail(record, 2)
             }}>编辑</a>
           </span>
         ),
@@ -84,7 +84,7 @@ export default class Article extends Component {
   }
   
   // 获取文章详情
-  getArticleDetail = async (record) => {
+  getArticleDetail = async (record, modalStatus) => {
 
 //     author: 小美
 // categoryId: 7089
@@ -109,10 +109,13 @@ export default class Article extends Component {
 // views: 0
 // extJsonStr: {}
     const result = await reqGetArticleDetail(record.id)
-    // 保存当前记录数据用于传递给子组件detail-form
-    this.currentDetail = result.data.data;
-    // 显示详情Modal
-    this.handleModalStatus(1)
+    if (result.data.code === 0) {
+
+      // 保存当前记录数据用于传递给子组件detail-form
+      this.currentRecord = result.data.data;
+      // 显示详情Modal
+      this.handleModalStatus(modalStatus)
+    }
     
   }
   // 控制Modal弹窗
@@ -127,11 +130,17 @@ export default class Article extends Component {
     this.setState({modalStatus: 0})
   }
   // 点击编辑按钮
-  editArticle = (record) => {
-    // 保存当前记录数据用于传递给子组件detail-form
-    this.currentRecord = record;
-    // 显示编辑弹框
-    this.handleModalStatus(2)
+  editArticle = async (record) => {
+    const result = await reqGetArticleDetail(record.id)
+    if (result.data.code === 0) {
+      
+      // 保存当前记录数据用于传递给子组件detail-form
+      this.currentRecord = result.data.data;
+      // 显示编辑弹框
+      this.handleModalStatus(2)
+    } else {
+      message.error(result.data.msg)
+    }
   }
   // 点击编辑更新文章Modal弹窗OK按钮
   updateArticle =  () => {
@@ -198,7 +207,7 @@ export default class Article extends Component {
             null, 
           ]} 
         >
-          <DetailForm currentDetail={currentDetail} />
+          <DetailForm currentRecord={currentRecord} />
         </Modal>
         <Modal
           title="编辑文章"

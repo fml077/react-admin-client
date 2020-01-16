@@ -58,12 +58,21 @@ class EditForm extends Component {
               <TextArea rows={2}></TextArea>
             )}
           </Item>
-          <Item label="文章内容" hasFeedback>
+          {/* <Item label="文章内容" hasFeedback>
             {getFieldDecorator('content', {
               rules: [{ required: true, message: '请填写内容!' }],
               initialValue: currentRecord.content || ''
             })(
               <TextArea rows={3}></TextArea>
+            )}
+          </Item> */}
+          <Item label="文章内容" hasFeedback>
+            {getFieldDecorator('content', {
+              rules: [{ required: true, message: '请填写内容!' }],
+              initialValue: {__html:currentRecord.content}
+            })(
+              <div style={{padding: '4px 11px', border: '1px solid #d9d9d9', borderRadius: 4}} contentEditable='true' dangerouslySetInnerHTML={{__html:currentRecord.content}}></div>
+              // <TextArea  disabled rows={2}></TextArea>
             )}
           </Item>
         </Form>
