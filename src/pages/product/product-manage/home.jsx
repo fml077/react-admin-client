@@ -57,26 +57,69 @@ export default class ProductHome extends Component {
       }
     ]
   }
-  initTable = async () => {
-    /* // reqProductList 获取商品列表 POST请求 参数均为非必填 , 后端分页 
+  // 页码分页配置
+  paginationConfig = () => {
+    const {total, page, pageSize} = this.state;
+    
+    return {
+      defaultPageSize: 2, // 默认的每页条数
+      pageSize: pageSize || 2, // 每页条数
+      total: total,
+      showQuickJumper: true, // 快速跳转至某页
+      showSizeChanger: true, // 是否可以改变 pageSize
+      pageSizeOptions: ['1', '2', '5'], // 指定每页可以显示多少条
+      showTotal: (total) => '共' + total + '条', // 用于显示数据总量和当前数据顺序
+      onChange: (page, pageSize) => { // 页码改变的回调
+        this.setState({
+          pageSize,
+          page: 1 // 回到第一页
+        },
+        () =>  {
+          this.getTableList(page, pageSize)// 状态设置完毕重新渲染表格
+        })
+      }, 
+      onShowSizeChange: (current, pageSize) => { // pageSize 变化的回调
+        this.setState({
+          pageSize
+        },
+        () => {
+          this.getTableList(page, pageSize)// 状态设置完毕重新渲染表格
+        })
+      } 
+    }
+  }
+  // 获取表格数据
+  /* // reqProductList 获取商品列表 POST请求 参数均为非必填 , 后端分页 
     categoryId: 获取指定分类下的商品
     nameLike: 商品名称关键词模糊搜索
     status: -1 (-1全部状态 0上架 1下架)
     page: 获取第几页数据
     pageSize: 每页显示几条数据 */
-    const result = await reqProductList({status: -1}) // 默认返回全部状态数据
-    const productList = result.data
-    const total = productList.length; // 更新所有数据条数
-    
-    if (result.code === 0) {
-      this.setState({
-        productList,
-        total,
-        tableLoading: false // 关闭表格loading效果
-      })
-    } else {
-      message.error(result.msg)
-    }
+  getTableList = async(page = 1, pageSize = 2, categoryId, nameLike) => {
+    const totalResult = await reqProductList({status: -1}); //todo-- 接口缺陷无总数据total，此测试为了获得所有数据 来演示后台分页效果(实际开发无需这步)
+    const list = totalResult.data
+    const total = list.length; // 获取所有数据条数
+    this.setState({
+      total,
+      page,
+      pageSize,
+      categoryId,
+      nameLike
+    },
+    async () => {
+      // 后台分页
+      const result = await reqProductList({status: -1, page, pageSize, categoryId, nameLike }) // 默认返回全部状态数据
+      const productList = result.data
+      
+      if (result.code === 0) {
+        this.setState({
+          productList,
+          tableLoading: false // 关闭表格loading效果
+        })
+      } else {
+        message.error(result.msg)
+      }
+    })
   }
   
   //WARNING! To be deprecated in React v17. Use componentDidMount instead.
@@ -84,7 +127,7 @@ export default class ProductHome extends Component {
     this.initColumns()
   }
   componentDidMount() {
-    this.initTable()
+    this.getTableList()
   }
   
   render() {
@@ -106,7 +149,13 @@ export default class ProductHome extends Component {
     return (
       <div>
         <Card title={title} extra={extra}>
-          <Table dataSource={productList} columns={this.columns} rowKey={record => record.id} bordered />
+          <Table 
+            dataSource={productList} 
+            columns={this.columns} 
+            pagination={this.paginationConfig()}
+            rowKey={record => record.id} 
+            bordered
+           />
         </Card>
       </div>
     )
