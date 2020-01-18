@@ -49,4 +49,44 @@ categoryId: 文章分类ID, content:文章内容, descript:文章摘要, title:�
 */
 export const reqUpdateArticle =({categoryId, content, descript, title }) => ajax('/cms/news/put', {categoryId, content, descript, title }, 'POST')
 
+/* 
+//  编辑文章 POST请求, 传参
+deviceId: 登录设备ID，测试接口自定义即可, deviceName:登录设备名称， 测试接口自定义即可, pwd:登录密码, username:用户名 
+*/
+export const reqLoginTest =({ deviceId, deviceName, pwd, username }) => ajax('/user/username/login', { deviceId, deviceName, pwd, username }, 'POST')
+// 获取手机短信验证码 GET请求
+export const reqMobileCode =(mobile) => ajax('/verification/sms/get', {mobile})
+// 获取邮箱验证码 GET请求
+export const reqSetEmailCode =(mail) => ajax('/verification/mail/get', {mail})
+
+/* 
+// 校验邮件验证码是否正确 POST请求，验证码有效期5分钟
+code:用户输入的邮件验证码
+mail:用户邮箱
+ */
+export const reqCheckEmailCode =({ code, mail }) => ajax('/verification/mail/check', { code, mail }, 'POST')
+/* 
+// 用户注册[邮箱注册] POST请求，
+code:用户输入的邮件验证码
+mail:用户邮箱
+psd:用户密码
+ */
+export const reqEmailRegister =({ code, email, pwd }) => ajax('/user/email/register', { code, email, pwd }, 'POST')
+/* 
+// 用户登录[邮箱登录] POST请求，
+deviceId: 登录设备ID，测试接口自定义即可, deviceName:登录设备名称， 测试接口自定义即可
+email:用户邮箱
+psd:用户密码
+ */
+export const reqEmailLogin =({ deviceId, deviceName, email, pwd }) => ajax('/user/email/login', { deviceId, deviceName, email, pwd }, 'POST')
+/* 
+// 获取商品列表 POST请求 参数均为非必填 , 后端分页 
+categoryId: 获取指定分类下的商品
+nameLike: 商品名称关键词模糊搜索
+status: -1 (-1全部状态 0上架 1下架)
+page: 获取第几页数据
+pageSize: 每页显示几条数据 */
+export const reqProductList =(params) => ajax('/shop/goods/list', params, 'POST')
+
+
 

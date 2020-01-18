@@ -74,12 +74,14 @@ export default class Article extends Component {
 // views: 37}
     this.setState({tableLoading: true})
     const result = await reqGetArticleList()
-    const articles = result.data.data
-    if (result.data.code === 0) {
-      this.setState({articles})
-      this.setState({tableLoading: false})
+    const articles = result.data
+    if (result.code === 0) {
+      this.setState({
+        articles,
+        tableLoading: false
+      })
     } else {
-      message.error(result.data.msg)
+      message.error(result.msg)
     }
   }
   
@@ -109,14 +111,12 @@ export default class Article extends Component {
 // views: 0
 // extJsonStr: {}
     const result = await reqGetArticleDetail(record.id)
-    if (result.data.code === 0) {
-
+    if (result.code === 0) {
       // 保存当前记录数据用于传递给子组件detail-form
-      this.currentRecord = result.data.data;
+      this.currentRecord = result.data;
       // 显示详情Modal
       this.handleModalStatus(modalStatus)
     }
-    
   }
   // 控制Modal弹窗
   handleModalStatus = (status) => {
@@ -132,14 +132,13 @@ export default class Article extends Component {
   // 点击编辑按钮
   editArticle = async (record) => {
     const result = await reqGetArticleDetail(record.id)
-    if (result.data.code === 0) {
-      
+    if (result.code === 0) {
       // 保存当前记录数据用于传递给子组件detail-form
-      this.currentRecord = result.data.data;
+      this.currentRecord = result.data;
       // 显示编辑弹框
       this.handleModalStatus(2)
     } else {
-      message.error(result.data.msg)
+      message.error(result.msg)
     }
   }
   // 点击编辑更新文章Modal弹窗OK按钮
@@ -158,12 +157,11 @@ export default class Article extends Component {
         this.form && this.form.resetFields()
         // 3、发请求更新数据
         const result = await reqUpdateArticle({categoryId, content, descript, title});
-        console.log('4443',result.data.data);
         // 4、重新渲染列表表格数据
-        if (result.data.code === 0) {
+        if (result.code === 0) {
           this.getArticlesList()
         } else {
-          message.error(result.data.msg)
+          message.error(result.msg)
         }
       } else {
         return

@@ -1,52 +1,14 @@
 import React, { Component } from 'react'
-import { Card, Select, Button, Input, Table } from 'antd'
+import { Card, Select, Button, Input, Table, message } from 'antd'
+import { reqProductList } from '../../../api/index'
 
 const {Option} = Select
-const dataSource = [
-    {
-        "categoryId": 87833,
-        "characteristic": "方便面 广西特产 美食",
-        "commission": 0,
-        "commissionType": 0,
-        "dateAdd": "2020-01-18 15:26:43",
-        "dateUpdate": "2020-01-18 15:36:44",
-        "gotScore": 0,
-        "gotScoreType": 0,
-        "id": 262807,
-        "kanjia": false,
-        "kanjiaPrice": 0,
-        "limitation": false,
-        "logisticsId": 0,
-        "miaosha": false,
-        "minPrice": 80,
-        "minScore": 0,
-        "name": "桂林米粉",
-        "numberFav": 0,
-        "numberGoodReputation": 0,
-        "numberOrders": 0,
-        "numberSells": 0,
-        "originalPrice": 110,
-        "paixu": 0,
-        "pic": "https://dcdn.it120.cc/2020/01/18/d9f02509-762a-473b-ad97-77ba5e202727.jpeg",
-        "pingtuan": false,
-        "pingtuanPrice": 0,
-        "recommendStatus": 0,
-        "recommendStatusStr": "普通",
-        "shopId": 0,
-        "status": 0,
-        "statusStr": "上架",
-        "stores": 120,
-        "tags": "方便面,广西特产",
-        "userId": 11135,
-        "vetStatus": 1,
-        "views": 1,
-        "weight": 0
-    }
-]
 
 export default class ProductHome extends Component {
   state = {
-    productList: [], // 商品列表
+    productList: [], // 商品列表数据
+    total: 0, // 总共所有数据条数
+    tableLoading: true, // 表格loading效果
   }
   // 改变查询条件
   handleSelectChange = (e) => {
@@ -92,12 +54,37 @@ export default class ProductHome extends Component {
              </span>
           );
         }
-      },
+      }
     ]
   }
+  initTable = async () => {
+    /* // reqProductList 获取商品列表 POST请求 参数均为非必填 , 后端分页 
+    categoryId: 获取指定分类下的商品
+    nameLike: 商品名称关键词模糊搜索
+    status: -1 (-1全部状态 0上架 1下架)
+    page: 获取第几页数据
+    pageSize: 每页显示几条数据 */
+    const result = await reqProductList({status: -1}) // 默认返回全部状态数据
+    const productList = result.data
+    const total = productList.length; // 更新所有数据条数
+    
+    if (result.code === 0) {
+      this.setState({
+        productList,
+        total,
+        tableLoading: false // 关闭表格loading效果
+      })
+    } else {
+      message.error(result.msg)
+    }
+  }
+  
   //WARNING! To be deprecated in React v17. Use componentDidMount instead.
   componentWillMount() {
     this.initColumns()
+  }
+  componentDidMount() {
+    this.initTable()
   }
   
   render() {
@@ -119,7 +106,7 @@ export default class ProductHome extends Component {
     return (
       <div>
         <Card title={title} extra={extra}>
-          <Table dataSource={dataSource} columns={this.columns} rowKey={record => record.id} bordered />
+          <Table dataSource={productList} columns={this.columns} rowKey={record => record.id} bordered />
         </Card>
       </div>
     )
