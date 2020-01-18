@@ -10,7 +10,8 @@ import Category  from '../category/category-list'
 import Article  from '../category/article-list'
 import User  from '../user'
 import Role  from '../role'
-import Product  from '../product'
+import productCategory  from '../product/product-category'
+import Product  from '../product/product-manage'
 import Bar  from '../charts/bar'
 import Line  from '../charts/line'
 import Pie  from '../charts/pie'
@@ -44,6 +45,7 @@ export default class Admin extends Component {
               <Route path="/article" component={Article}/>
               <Route path="/user" component={User}/>
               <Route path="/role" component={Role}/>
+              <Route path="/productCategory" component={productCategory}/>
               <Route path="/product" component={Product}/>
               <Route path="/bar" component={Bar}/>
               <Route path="/line" component={Line}/>

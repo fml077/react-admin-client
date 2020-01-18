@@ -7,8 +7,8 @@ const menuList = [
     link: '/home'
   },
   {
-    title: '商品',
-    key: '/products',
+    title: '文章',
+    key: '/articles',
     icon: 'calendar',
     itemGroup: '文章管理',
     children: [
@@ -24,12 +24,26 @@ const menuList = [
         icon: 'setting',
         link: '/article'
       },
-      // {
-      //   title: '商品入库',
-      //   key: '/product',
-      //   icon: 'calendar',
-      //   link: '/product'
-      // },
+    ]
+  },
+  {
+    title: '商品',
+    key: '/products',
+    icon: 'calendar',
+    itemGroup: '商品管理',
+    children: [
+      {
+        title: '商品分类',
+        key: '/productCategory',
+        icon: 'calendar',
+        link: '/productCategory'
+      },
+      {
+        title: '商品管理',
+        key: '/product',
+        icon: 'setting',
+        link: '/product'
+      },
     ]
   },
   {
