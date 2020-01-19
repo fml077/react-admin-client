@@ -54,6 +54,7 @@ export default class ProductHome extends Component {
         render: (record) => { // 传入的是整条行数据
           return (
              <span>
+               {/* 将产品信息record对象使用路由history对象以state属性传递给目标路由组件(可在目标路由的state中查看传递过去的数据) */}
                <Button type='link' onClick={(e) => {this.props.history.push('/product/detail', record)}}>查看详情</Button>
                <Button type='link'>编辑</Button>
              </span>
