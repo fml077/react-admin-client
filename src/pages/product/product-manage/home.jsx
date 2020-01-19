@@ -9,17 +9,22 @@ export default class ProductHome extends Component {
     productList: [], // 商品列表数据
     total: 0, // 总共所有数据条数
     tableLoading: true, // 表格loading效果
+    searchType: 'categoryId', // 搜索类型
+    searchValue: '', // 搜索框输入值
   }
-  // 改变查询条件
-  handleSelectChange = (e) => {
-    console.log('ee',e);
-    
+  // 改变select查询条件
+  handleSelectChange = (value) => {
+    this.setState({searchType: value})
+  }
+  // 改变input输入内容查询条件
+  handleInputChange = (e) => {
+    this.setState({searchValue: e.target.value})
   }
   // 初始化表格列数据
   initColumns = () => {
     this.columns = [
       {
-        title: 'ID',
+        title: '所属分类ID',
         dataIndex: 'categoryId',
         key: 'categoryId',
       },
@@ -95,7 +100,7 @@ export default class ProductHome extends Component {
     status: -1 (-1全部状态 0上架 1下架)
     page: 获取第几页数据
     pageSize: 每页显示几条数据 */
-  getTableList = async(page = 1, pageSize = 2, categoryId, nameLike) => {
+  getTableList = async(page = 1, pageSize = 2) => {
     const totalResult = await reqProductList({status: -1}); //todo-- 接口缺陷无总数据total，此测试为了获得所有数据 来演示后台分页效果(实际开发无需这步)
     const list = totalResult.data
     const total = list.length; // 获取所有数据条数
@@ -103,20 +108,25 @@ export default class ProductHome extends Component {
       total,
       page,
       pageSize,
-      categoryId,
-      nameLike
+      tableLoading: true,
     },
+    // setState 异步处理完成后再执行接口请求保证拿到最新的state数据
     async () => {
+      const { page, pageSize, searchType, searchValue } = this.state
+      let result
       // 后台分页
-      const result = await reqProductList({status: -1, page, pageSize, categoryId, nameLike }) // 默认返回全部状态数据
-      const productList = result.data
-      
+      if (searchValue) { // 如果输入框有值就按分类ID(传字段categoryId)或者是按名称(传字段nameLike)搜索
+        result = await reqProductList({status: -1, page, pageSize, [searchType]:searchValue }) // 默认返回全部状态数据
+      } else { // 普通搜索
+        result = await reqProductList({status: -1, page, pageSize}) // 默认返回全部状态数据
+      }
+      const productList = result.data || []
+      // 请求完毕 关闭loading
+      this.setState({tableLoading: false})
       if (result.code === 0) {
-        this.setState({
-          productList,
-          tableLoading: false // 关闭表格loading效果
-        })
-      } else {
+        this.setState({productList})
+      } else { // 其他错误则清空表格数据并提示错误信息
+        this.setState({productList: []})
         message.error(result.msg)
       }
     })
@@ -131,20 +141,21 @@ export default class ProductHome extends Component {
   }
   
   render() {
+    const {searchType, searchValue} = this.state
     const title = (
       <span>
-        <Select defaultValue="1" style={{ width: 150 }} onChange={this.handleSelectChange}>
-          <Option value='1'>按商品ID搜索</Option>
-          <Option value='2'>按商品名称搜索</Option>
+        <Select defaultValue="categoryId" style={{ width: 150 }} value={searchType} onChange={(value)=>this.handleSelectChange(value)}>
+          <Option value='categoryId'>按商品分类ID搜索</Option>
+          <Option value='nameLike'>按商品名称搜索</Option>
         </Select>
-        <Input placeholder='请输入……' style={{width: 200, margin: '0 10px'}} />
-        <Button type='primary' icon="search">搜索</Button>
+        <Input placeholder='ID要完全匹配/名称可模糊匹配' style={{width: 220, margin: '0 10px'}} value={searchValue} onChange={(event)=>this.handleInputChange(event)} />
+        <Button type='primary' icon="search" onClick={()=>this.getTableList()}>搜索</Button>
       </span>
     )
     const extra = (
       <Button type='primary' icon="plus">添加商品</Button>
     )
-    const { productList } = this.state
+    const { productList, tableLoading } = this.state
     
     return (
       <div>
@@ -154,6 +165,7 @@ export default class ProductHome extends Component {
             columns={this.columns} 
             pagination={this.paginationConfig()}
             rowKey={record => record.id} 
+            loading={tableLoading}
             bordered
            />
         </Card>
