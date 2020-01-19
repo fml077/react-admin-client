@@ -1,88 +1,44 @@
 import React, { Component } from 'react'
-import { Card, Select, Button, Input, Table, message, List, Icon } from 'antd'
+import { Card, Tag, List, Icon } from 'antd'
 import './index.less'
+import { reqProductDetail } from "../../../api/index";
 const {Item} = List
+// 自定义tag标签颜色样式
+const tagsColor = ['magenta','red','volcano','gold','blue','purple','green','lime']
 
-// 详情接口返回数据格式
-const dataSource = {
-  "extJson": {},
-  "category": {
-      "dateAdd": "2020-01-16 15:23:46",
-      "id": 87452,
-      "isUse": true,
-      "key": "4001",
-      "name": "服装",
-      "paixu": 4,
-      "pid": 0,
-      "type": "4",
-      "userId": 11135
-  },
-  "pics": [
-      {
-          "goodsId": 262888,
-          "id": 1311709,
-          "pic": "https://dcdn.it120.cc/2020/01/18/360b5723-b536-44a7-a868-89dc63e45956.jpeg",
-          "userId": 11135
-      }
-  ],
-  "content": "<ol>\n<li><b>夏天 ，清爽</b></li>\n<li><b>超级凉爽</b></li>\n</ol>",
-  "basicInfo": {
-      "categoryId": 87452,
-      "characteristic": "夏天 ，清爽 盛夏",
-      "commission": 0,
-      "commissionType": 0,
-      "dateAdd": "2020-01-18 22:47:04",
-      "dateUpdate": "2020-01-19 18:05:53",
-      "gotScore": 0,
-      "gotScoreType": 0,
-      "id": 262888,
-      "kanjia": false,
-      "kanjiaPrice": 0,
-      "limitation": false,
-      "logisticsId": 0,
-      "miaosha": false,
-      "minPrice": 880,
-      "minScore": 0,
-      "name": "夏天清爽T恤",
-      "numberFav": 0,
-      "numberGoodReputation": 0,
-      "numberOrders": 0,
-      "numberSells": 0,
-      "originalPrice": 990,
-      "paixu": 0,
-      "pic": "https://dcdn.it120.cc/2020/01/18/360b5723-b536-44a7-a868-89dc63e45956.jpeg",
-      "pingtuan": false,
-      "pingtuanPrice": 0,
-      "recommendStatus": 0,
-      "recommendStatusStr": "普通",
-      "shopId": 0,
-      "status": 0,
-      "statusStr": "上架",
-      "stores": 20,
-      "tags": "夏天,清爽",
-      "userId": 11135,
-      "vetStatus": 1,
-      "views": 0,
-      "weight": 0
-  }
-}
 export default class ProductDetail extends Component {
-  
+  state = {
+    detailData: {} // 商品详情数据
+  }
+  // 获取详情页数据
+  getDetail = async() => {
+      // 接收从列表页点详情按钮传递过来的商品state数据中的产品id
+    const productId = this.props.location.state.id
+      const result = await reqProductDetail({id: productId})
+      // 存储商品详情数据
+      this.setState({detailData: result.data})
+  }
+  componentDidMount () {
+    this.getDetail()
+  }
   render() {
     // 接收从列表页点详情按钮传递过来的商品state数据
     const productDetailData = this.props.location.state;
-    // console.log(productDetailData);
-    const {name, id, characteristic, originalPrice, statusStr, tags, stores } = productDetailData
-    // const { category, pics, content, basicInfo } = dataSource
+    const {name, id, originalPrice, statusStr, tags, stores } = productDetailData
+    // tag标签分隔成数组
+    const tagsLabel = tags.split(',')
+    // 解构详情数据
+    const { category, pics, content } = this.state.detailData
     
     const title = (
       <span>
-        <Icon type="arrow-right" />
+        {/* 回退到上一个页面，也可用this.props.history.push('/product') */}
+        <Icon type="arrow-right" onClick={() => this.props.history.goBack()} style={{color: '#1890ff', marginRight: 10}} />
         商品详情
       </span>
     )
     const extra = (
-      <span>这是详情页</span>
+      <span style={{fontSize: 16, fontWeight: 500}}>{name}</span>
     )
     return (
       <Card className="detail-page" title={title} extra={extra}>
@@ -96,7 +52,7 @@ export default class ProductDetail extends Component {
             </Item>
             <Item>
               <span className="left-label">商品所属分类：</span>
-              {/* <span>{category.name}</span> */}
+              <span>{category && category.name }</span>
             </Item>
             <Item>
               <span className="left-label">商品ID：</span>
@@ -104,7 +60,8 @@ export default class ProductDetail extends Component {
             </Item>
             <Item>
               <span className="left-label">商品详情描述：</span>
-              {/* <span>{content}</span> */}
+              {/*dangerouslySetInnerHTML渲染HTML标签 innerHTML 的替换 */}
+              <span dangerouslySetInnerHTML={{__html:content}}></span>
             </Item>
             <Item>
               <span className="left-label">商品价格：</span>
@@ -116,7 +73,11 @@ export default class ProductDetail extends Component {
             </Item>
             <Item>
               <span className="left-label">商品标签：</span>
-              <span>{tags}</span>
+              <span>
+                {tagsLabel && tagsLabel.map((item,i )=>(
+                  <Tag key={i} color={tagsColor[i]}>{item}</Tag>
+                ))}
+              </span>
             </Item>
             <Item>
               <span className="left-label">商品库存：</span>
@@ -124,7 +85,11 @@ export default class ProductDetail extends Component {
             </Item>
             <Item>
               <span className="left-label">商品图片：</span>
-              {/* <span><img src="" alt="" srcSet=""/></span> */}
+              <span className="product-imgs">
+                {pics && pics.map((item, i)=>(
+                  <img key={i} src={item.pic} alt="" srcSet=""/>
+                ))}
+              </span>
             </Item>
         </List>
       </Card>

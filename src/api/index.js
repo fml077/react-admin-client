@@ -87,6 +87,9 @@ status: -1 (-1全部状态 0上架 1下架)
 page: 获取第几页数据
 pageSize: 每页显示几条数据 */
 export const reqProductList =(params) => ajax('/shop/goods/list', params, 'POST')
-
+/* // 获取商品详情数据
+id: 商品id 
+*/
+export const reqProductDetail =(params) => ajax('/shop/goods/detail', params)
 
 
