@@ -54,7 +54,7 @@ export default class ProductHome extends Component {
         render: (record) => { // 传入的是整条行数据
           return (
              <span>
-               <Button type='link'>查看详情</Button>
+               <Button type='link' onClick={(e) => {this.props.history.push('/product/detail', record)}}>查看详情</Button>
                <Button type='link'>编辑</Button>
              </span>
           );
