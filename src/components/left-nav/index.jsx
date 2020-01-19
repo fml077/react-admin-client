@@ -25,7 +25,7 @@ class LeftNav extends Component {
          // 得到当前请求的路由路径，默认高亮对应菜单
          const path = this.props.location.pathname
          // 查找与当前路径匹配的子item，如果存在将当前item展开
-         const cItem = item.children.find((cItem) => cItem.key === path)
+         const cItem = item.children.find((cItem) => path.indexOf(cItem.key) === 0)
          // 展开菜单
          if (cItem) {
            this.openKey = item.key
@@ -53,7 +53,7 @@ class LeftNav extends Component {
          // 得到当前请求的路由路径，默认高亮对应菜单
         const path = this.props.location.pathname
         // 查找与当前路径匹配的子item，如果存在将当前item展开
-        const cItem = item.children.find((cItem) => cItem.key === path)
+        const cItem = item.children.find((cItem) => path.indexOf(cItem.key) === 0)
         // 展开菜单
         if (cItem) {
           this.openKey = item.key
@@ -61,7 +61,7 @@ class LeftNav extends Component {
         pre.push((
           <SubMenu key={item.key} title={<span><Icon type={item.icon} />{item.title}</span>} >
             {/* 递归调用 */}
-            {this.getMenuList(item.children)}
+            {this.getMenuList_reduce(item.children)}
           </SubMenu>
         ))
       }
@@ -78,7 +78,11 @@ class LeftNav extends Component {
   }
   render() {
     // 得到当前请求的路由路径，默认高亮对应菜单
-    const path = this.props.location.pathname
+    let path = this.props.location.pathname
+    // 如果当前请求的路由是product或者其子路由页面 高亮商品管理菜单标签
+    if (path.indexOf('/product') === 0) {
+      path='/product'
+    }
     const openKey = this.openKey
     return (
       <div className="left-nav">
