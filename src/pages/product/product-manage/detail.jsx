@@ -22,7 +22,7 @@ export default class ProductDetail extends Component {
     this.getDetail()
   }
   render() {
-    // 接收从列表页点详情按钮传递过来的商品state数据
+    // 接收从列表页点详情按钮传递过来的商品state数据(此处是为了验证this.props.location.state传数据的用法，实际开发可选择从详情接口获取所有详情数据)
     const productDetailData = this.props.location.state;
     const {name, id, originalPrice, statusStr, tags, stores } = productDetailData
     // tag标签分隔成数组
@@ -33,7 +33,7 @@ export default class ProductDetail extends Component {
     const title = (
       <span>
         {/* 回退到上一个页面，也可用this.props.history.push('/product') */}
-        <Icon type="arrow-right" onClick={() => this.props.history.goBack()} style={{color: '#1890ff', marginRight: 10}} />
+        <Icon type="arrow-left" onClick={() => this.props.history.goBack()} style={{color: '#1890ff', marginRight: 10}} />
         商品详情
       </span>
     )

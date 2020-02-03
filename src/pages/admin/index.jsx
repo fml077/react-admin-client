@@ -32,7 +32,7 @@ export default class Admin extends Component {
       // <div>
       //   这是admin首页，欢迎{user.username}
       // </div>
-      <Layout style={{height: '100%'}}>
+      <Layout style={{minHeight: '100%'}}>
         <Sider>
           <LeftNav />
         </Sider>
